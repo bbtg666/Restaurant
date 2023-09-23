@@ -1,0 +1,53 @@
+﻿@model UserMealOrder
+@{
+    Layout = null;
+}
+
+<table class="table">
+    <tbody class="border-top-0">
+        <tr>
+            <th scope="row">Total Price</th>
+            <td>@string.Format("{0:0}", Model.TotalPrice)</td>
+        </tr>
+        <tr>
+            <th scope="row">Total Meals</th>
+            <td>@(Model.OrderMeals.Sum(x => x.Amount))</td>
+        </tr>
+        <tr>
+            <th scope="row">Address</th>
+            <td>@Model.User.Address</td>
+        </tr>
+        <tr>
+            <th scope="row">Phone</th>
+            <td>@Model.User.PhoneNumber</td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    <div>Detail meal</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total Price</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var orderMeal in Model.OrderMeals)
+            {
+                <tr>
+                    <th scope="row">@(Model.OrderMeals.IndexOf(orderMeal) + 1)</th>
+                    <td>@orderMeal.Meal.Name</td>
+                    <td>@orderMeal.Amount</td>
+                    <td>@orderMeal.Meal.Price</td>
+                    <td>@string.Format("{0:0}", orderMeal.Meal.Price * orderMeal.Amount)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

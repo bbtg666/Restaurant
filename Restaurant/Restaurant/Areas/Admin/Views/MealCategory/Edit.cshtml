@@ -1,0 +1,31 @@
+﻿@model MealRequest
+
+@{
+    ViewData["Title"] = "Admin - Edit Meal Category";
+}
+
+<div class="row justify-content-center">
+    <div class="card col-8 p-0">
+        <div class="card-header">
+            Edit Meal Category
+        </div>
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <form method="post">
+                @Html.HiddenFor(model => model.ID)
+                <div class="mb-3">
+                    <label asp-for="@Model.Name" class="form-label"></label>
+                    <input asp-for="@Model.Name" class="form-control">
+                    <span asp-validation-for="@Model.Name" class="text-danger "></span>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button id="btnCreate" class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"></partial>
+}

@@ -1,0 +1,74 @@
+﻿@model Cart
+
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <h3>Cart</h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.CartItems.Any())
+                {
+                    foreach (var item in Model.CartItems)
+                    {
+                        var meal = Model.Meals.FirstOrDefault(x => x.ID == item.MealId);
+
+                        if (meal is null)
+                        {
+                            continue;
+                        }
+
+                        <tr id="cartItem-@meal.ID">
+                            <th class="align-middle">@(Model.CartItems.IndexOf(item) + 1)</th>
+                            <td class="align-middle">@meal.Name</td>
+                            <td class="align-middle">@meal.Description</td>
+                            <td class="align-middle">@meal.Price.ToString()</td>
+                            <td class="align-middle">
+                                <input min="0" onchange="Cart.calculatePrice(this, @meal.ID, @meal.Price)" type="number" value="@(item.Amount)">
+                            </td>
+                            <td id="cartTotalPrice-@meal.ID" class="align-middle">@(string.Format("{0:0}", meal.Price * item.Amount))</td>
+                            <td class="align-middle">
+                                <div class="d-flex  ">
+                                    <button onclick="Cart.deleteCartItem(@meal.ID)" type="submit" class="btn btn-danger ms-2">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                <tr id="trEmpty" class="@(Model.CartItems.Any() ? "d-none" : "")">
+                    <td colspan="7">
+                        <div class="text-center h5">
+                            Empty
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <form id="submitOrder" asp-action="OrderMeal" asp-controller="Order" method="post" class="@(Model.CartItems.Any() ? "" : "d-none")">
+            <div class="mt-3 d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary" asp-action="OrderMeal" asp-controller="Order">Order</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/cart/cart.js"></script>
+    <script>
+        Cart.totalCartItem = @Model.CartItems.Count;
+    </script>
+}

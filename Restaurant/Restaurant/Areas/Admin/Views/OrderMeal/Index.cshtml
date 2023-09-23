@@ -1,0 +1,96 @@
+﻿@model List<UserMealOrder>
+
+@{
+    ViewData["Title"] = "Admin - Order Meal";
+    var statusSelectBoxValue = ViewBag.StatusSelectBoxValue as List<SelectListItem>;
+}
+
+<form method="get" asp-area="Admin" asp-action="Index" asp-controller="OrderMeal">
+    <div class="row justify-content-end">
+        <div class="col-3">
+            <input name="Content" type="text" class="form-control" placeholder="Content" value="@ViewBag.ContentSearch">
+        </div>
+        <div class="col-3">
+            <select asp-items="@statusSelectBoxValue" name="Status" class="form-control">
+                <option value="">--Plese select status--</option>
+            </select>
+        </div>
+
+        <div class="col-1">
+            <button type="submit" class="btn btn-dark mb-3">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="card">
+    <div class="card-header">
+        <h3>Order meal</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Total meals</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Order Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var order in Model)
+                    {
+                        statusSelectBoxValue?.ForEach(x =>
+                        {
+                            x.Selected = false;
+                        });
+
+                        var optionSelected = statusSelectBoxValue?.FirstOrDefault(x => x.Value.Equals(order.Status.ToString(), StringComparison.OrdinalIgnoreCase));
+
+                        if (optionSelected is not null)
+                        {
+                            optionSelected.Selected = true;
+                        }
+
+                        <tr>
+                            <th class="align-middle">@(Model.IndexOf(order) + 1)</th>
+                            <td class="align-middle">@order.User.Name</td>
+                            <td class="align-middle">@order.User.Address</td>
+                            <td class="align-middle">@order.User.PhoneNumber</td>
+                            <td class="align-middle">@(order.OrderMeals.Sum(x =>x.Amount))</td>
+                            <td class="align-middle">@order.TotalPrice</td>
+                            <td class="align-middle">@Common.GetDisplayDate(order.CreatedDate)</td>
+                            <td class="align-middle">
+                                <select asp-items="@statusSelectBoxValue" class="form-control" onchange="Order.changeStatus(this, @order.ID)">
+                                </select>
+                            </td>
+                            <td onclick="Order.showDetail(@order.ID)">
+                                <button class="btn btn-primary">Detail</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">
+                            <div class="text-center h5">
+                                Empty
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/order/order.js"></script>
+}

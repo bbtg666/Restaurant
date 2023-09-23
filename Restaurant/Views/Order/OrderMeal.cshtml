@@ -1,0 +1,55 @@
+﻿@model List<Meal>
+
+@{
+    ViewData["Title"] = "Order Meal";
+}
+
+<h2>Meals</h2>
+
+<form method="get" asp-area="" asp-action="OrderMeal" asp-controller="Order">
+    <div class="row justify-content-end">
+        <div class="col-3">
+            <input name="Content" type="text" class="form-control" placeholder="Content" value="@ViewBag.ContentSearch">
+        </div>
+        <div class="col-3">
+            <select asp-items="@ViewBag.CategorySelectBoxValue" name="Category" class="form-control">
+                <option value="">--Select category--</option>
+            </select>
+        </div>
+
+        <div class="col-1">
+            <button type="submit" class="btn btn-dark mb-3">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    @if (Model.Any())
+    {
+        foreach (var meal in Model)
+        {
+            <div class="col-4 p-3">
+                <div class="card ">
+                    <img src="@($"/image/{meal.URL}")" class="card-img-top" height="300">
+                    <div class="card-body">
+                        <h5 class="card-title">@meal.Name</h5>
+                        <p class="card-text">@meal.Description</p>
+                        <h5 class="card-text">@($"{meal.Price.ToString()} $")</h5>
+                        <button class="btn btn-primary" onclick="Cart.addItemToCart(this, @meal.ID)">
+                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            <span class="ms-1">Add to Cart</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <h5>Empty</h5>
+    }
+</div>
+
+@section Scripts{
+    <script src="~/js/cart/cart.js"></script>
+}

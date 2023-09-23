@@ -1,0 +1,39 @@
+﻿@model LoginRequest
+<div class="row justify-content-center">
+    <div class="card col-5">
+        <form method="post">
+            <div class="form-outline mt-4">
+                <label class="form-label" for="inputAccount">Account</label>
+                <input asp-for="@Model.UserName" type="text" id="inputAccount" class="form-control" />
+                <span asp-validation-for="@Model.UserName" class="text-danger "></span>
+            </div>
+
+            <div class="form-outline mt-4">
+                <label class="form-label" for="intputPassword">Password</label>
+                <input asp-for="@Model.Password" type="password" id="intputPassword" class="form-control" />
+                <span asp-validation-for="@Model.Password" class="text-danger "></span>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col d-flex">
+                    <div class="form-check">
+                        <input asp-for="@Model.RememberMe class="form-check-input" type="checkbox" id="inputRememberMe" />
+                        <label class="form-check-label" for="inputRememberMe"> Remember me </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <button type="submit" class="btn btn-primary btn-block col-11 m-4">Sign in</button>
+            </div>
+
+            <div class="text-center">
+                <p>Not a member? <a asp-action="SignUp" asp-controller="Account">Register</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"></partial>
+}

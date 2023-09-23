@@ -1,0 +1,54 @@
+﻿@model MealRequest
+
+@{
+    ViewData["Title"] = "Admin - Edit Meal";
+}
+
+<div class="row justify-content-center">
+    <div class="card col-8 p-0">
+        <div class="card-header">
+            Edit Meal
+        </div>
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <div class="card-body">
+            <form method="post">
+                @Html.HiddenFor(model => model.ID)
+                <div class="mb-3">
+                    <label asp-for="@Model.Name" class="form-label"></label>
+                    <input asp-for="@Model.Name" class="form-control">
+                    <span asp-validation-for="@Model.Name" class="text-danger "></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="@Model.Price" class="form-label"></label>
+                    <input asp-for="@Model.Price" class="form-control">
+                    <span asp-validation-for="@Model.Price" class="text-danger "></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="@Model.Description" class="form-label"></label>
+                    <input asp-for="@Model.Description" class="form-control">
+                    <span asp-validation-for="@Model.Description" class="text-danger "></span>
+                </div>
+
+                <div class="mb-3 d-flex">
+                    <div class="col-4">
+                        <label asp-for="@Model.CategoryID" class="form-label"></label>
+                        <select asp-for="@Model.CategoryID" asp-items="@ViewBag.CategorySelectBoxValue" class="form-control">
+                            <option value="">--Plese select status--</option>
+                        </select>
+                        <span asp-validation-for="@Model.CategoryID" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button id="btnCreate" class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"></partial>
+}
